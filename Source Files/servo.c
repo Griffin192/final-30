@@ -21,7 +21,7 @@
 #include    "stdbool.h"         // Include Boolean (true/false) definitions
 
 #include    "UBMP410.h"         // Include UBMP4 constants and functions
-#include    "Servo.h"           // Include UBMP4 servo definitions
+#include    "motors.h"           // Include UBMP4 servo definitions
 
 // Create a servo pulse on the specified output (SERVO1 - 8), for a duration
 // corresponding to the position value. Ensure PORTC servo pins are previously
@@ -29,7 +29,7 @@
 void servo_pulse(unsigned char servo, unsigned char position)
 {
     PORTC = PORTC | servo;      // Set servo pin high and make fixed delay
-    __delay_us(984);            // (change this value for 180 degree servos)
+    __delay_us(1462);            // (change this value for 180 degree servos)
     for(position; position != 0; position--)   // Extend delay by position value
     {
         _delay(38);             // Clock cycle delay to make 1ms pulse (pos = 255)

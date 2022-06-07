@@ -5,10 +5,7 @@
 #include    "motors.h"           // Include servo function definitions
 
 unsigned char base_pos = 0;
-
-
-
-unsigned char servo1_pos = 128; // Servo 1 position variable
+unsigned int servo1_pos; // Servo 1 position variable
 unsigned char timerPeriods = 3; // Interrupt timer periods counter (x5ms)
 
 // Servo interrupt function using TMR0 to count 5ms intervals and generate 
@@ -29,12 +26,14 @@ void __interrupt() servo(void)
 }
 
 int main(void){
+    
     OSC_config();               // Configure internal oscillator for 48 MHz
     UBMP4_config();
     TRISC = 0b00001110;
 
     while(1){
-        
+        //test
+      /*  
         if(SW2 == 1 && base__pos != 256){   //moves the base right 
             BASEr = 1;
             base_pos ++;
@@ -49,24 +48,26 @@ int main(void){
             BASEl = 0;
         }
         
+        
 
         }
-         if(SW5 == 0 && servo1_pos > 0)
-        {
+        */
+
+         if(SW5 == 0 && servo1_pos > 0){
             servo1_pos --;
+            __delay_ms(2);
         }
         
-        if(SW4 == 0 && servo1_pos < 255)
-        {
+        if(SW4 == 0 && servo1_pos < 255){
             servo1_pos ++;
+             __delay_ms(2);
         }
         
 
-        if(SW1 == 0)
-        {
+        if(SW1 == 0){
             RESET();
         }
     }
-
-    
 }
+    
+
