@@ -29,10 +29,10 @@
 void servo_pulse(unsigned char servo, unsigned char position)
 {
     PORTC = PORTC | servo;      // Set servo pin high and make fixed delay
-    __delay_us(1462);            // (change this value for 180 degree servos)
+    __delay_us(500);            // (change this value for 180 degree servos)
     for(position; position != 0; position--)   // Extend delay by position value
     {
-        _delay(38);             // Clock cycle delay to make 1ms pulse (pos = 255)
+        _delay(85);             // Clock cycle delay to make 1ms pulse (pos = 255)
     }                           // (change clock delay to modify pulse)
     PORTC = PORTC & (!servo);   // End pulse by resetting servo pin
 }
