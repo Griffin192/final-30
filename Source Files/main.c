@@ -34,7 +34,7 @@ int main(void){
     
     OSC_config();               // Configure internal oscillator for 48 MHz
     UBMP4_config();
-    TRISC = 0b00001110;
+    TRISC = 0b0001000;
 
     while(1){
         //test
@@ -58,14 +58,14 @@ int main(void){
         
         */
 
-       if(SW2 == 0 && servoswitch != 2){
+       if(SW2 == 0 && servoswitch != 3){
            servoswitch ++;
            __delay_ms(500);
-        } 
-        if(SW3 == 0 && servoswitch != 0){
-            servoswitch --;
-            __delay_ms(520);
+        }if(servoswitch > 2){
+           servoswitch = 0;
+            __delay_ms(500);
         }
+        
         
         if(servoswitch == 0){           // servo 1
             LED3 = 1;
@@ -102,7 +102,7 @@ int main(void){
             if(SW5 == 0 && servo3_pos > 0 ){
                 servo3_pos --;
                 __delay_ms(2);
-        }
+            }
         
             if(SW4 == 0 && servo3_pos < 255 ){
                 servo3_pos ++;
