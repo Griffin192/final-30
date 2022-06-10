@@ -8,16 +8,6 @@
 #define BASEr 0b01000000 //motor output right pin on H7
 #define BASEl 0b10000000 //motor output left pin on H8
 
-/**
- * Function: servo_pulse(unsigned char servo, unsigned char position)
- * 
- * Creates a single servo pulse 0f 1-2ms length optimized for 90 degree servos.
- * Uses SERVO1 - SERVO8 header pin names (corresponding to H1 - H8 header pins)
- * defined in the header file as the servo parameter. 8-bit position values
- * ranging from 0-255 correspond to output pulse widths from 1-2ms. Ensure that
- * your main function repeatedly generates servo pulses every 15-20ms.
- * 
- * Example usage: servo_pulse(SERVO1, 127);
- */
+
 void servo_pulse(unsigned char, unsigned char);
 void servo_pulseC(unsigned char, unsigned char);
