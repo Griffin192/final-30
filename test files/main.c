@@ -6,7 +6,6 @@ servo four is special and needs it's own timing it's continuous it's mounted to 
 leds used to indacat what servo is selected 
 switch between servos with SW2 
 use  SW4 and SW5 to change the direction
-
 */
 #include    "xc.h"              
 #include    "stdint.h"          
@@ -18,9 +17,10 @@ use  SW4 and SW5 to change the direction
 unsigned char servo1_pos;        // Servo 1 position variable
 unsigned char servo2_pos;        // Servo 2 position variable
 unsigned char servo3_pos;        // Servo 3 position variable
-unsigned char servo4c_pos = 130;       // Servo 4 position variable 130 = no move 
+unsigned char servo4c_pos;       // Servo 4 position variable 130 = no move 
 unsigned char timerPeriods = 3; // Interrupt timer periods counter (x5ms)
-unsigned char servoswitch = 0; 
+unsigned char servoswitch = 3; 
+unsigned char LRbase = 0;
    
 
 // Servo interrupt function using TMR0 to count 5ms intervals and generate 
@@ -38,7 +38,7 @@ void __interrupt() servo(void)
             servo_pulse(SERVO1, servo1_pos);   // Update servo1 position
             servo_pulse(SERVO2, servo2_pos);   // Update servo2 position
             servo_pulse(SERVO3, servo3_pos);   // Update servo3 position    
-            servo_pulseC(SERVO4C, servo4c_pos);   // Update servo4C position
+            servo_pulse(SERVO4C, servo4c_pos);   // Update servo4C position
         }   
 	}
 }
@@ -50,8 +50,7 @@ int main(void){
     TRISC = 0b0000000;    //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa y
 
     while(1){
-      
-
+     
        if(SW2 == 0 && servoswitch != 4){ // pick servo
            servoswitch ++;
            __delay_ms(500);
@@ -65,10 +64,10 @@ int main(void){
             LED3 = 1;
             if(SW5 == 0 && servo1_pos > 0 ){
                 servo1_pos --;
-                __delay_ms(2);
+                __delay_ms(10);
             }if(SW4 == 0 && servo1_pos < 255 ){
                 servo1_pos ++;
-                __delay_ms(2);
+                __delay_ms(10);
             }
         }else{
             LED3 = 0;
@@ -78,10 +77,10 @@ int main(void){
             LED4 = 1;      
             if(SW5 == 0 && servo2_pos > 0 ){
                 servo2_pos --;
-                __delay_ms(2);
+                __delay_ms(10);
             }if(SW4 == 0 && servo2_pos < 255 ){
                 servo2_pos ++;
-                __delay_ms(2);
+                __delay_ms(10);
             }
         }else{
             LED4 = 0;
@@ -91,35 +90,42 @@ int main(void){
             LED5 = 1;        
             if(SW5 == 0 && servo3_pos > 0 ){
                 servo3_pos --;
-                __delay_ms(2);
+                __delay_ms(10);
             }if(SW4 == 0 && servo3_pos < 255 ){
                 servo3_pos ++;
-                __delay_ms(2);
+                __delay_ms(10);
             }
         }else{
             LED5 = 0;
         }
-        
-        if(servoswitch == 3){       //servo 4 it stops at 130 cuz it can  
+        if(servoswitch == 3){
             LED6 = 1;
-            if(SW5 == 0 && servo4c_pos 1= 100){
-                servo4c_pos = 100;
-                __delay_ms(2);
-            }else{
-                servo4c = 130;
-            }if(SW4 == 0 && servo4c_pos != 150 ){
-                servo4c_pos = 150;
-                __delay_ms(2);
-            }else{
-                servo4c = 130;
-            }
-
-         
-            
         }else{
-            TRISC = 0b0001000;  // i think i don't need this now but to scared to tuch now i'll try tomorow 5/6/2020
+            LED6 = 0;
         }
-       
+        if(servoswitch == 3 && SW5 == 0){
+            TRISC = 0b0000000;
+            H4OUT = 1;
+            __delay_us(1300);
+            H4OUT = 0;
+            __delay_us(18,700);
+        }else{
+            TRISC = 0b0001000;
+        }
+          
+      
+        if(servoswitch == 3 && SW4 == 0 ){
+            TRISC = 0b0001000;
+            H4OUT = 1;
+            __delay_us(1700);
+            H4OUT = 0;
+            __delay_us(18,300);
+
+        }else{
+            TRISC = 0b0001000;
+        }
+ 
+        
     
         if(SW1 == 0){
             RESET(); 
@@ -127,4 +133,3 @@ int main(void){
     }
 }
     
-
