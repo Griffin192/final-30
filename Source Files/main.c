@@ -58,8 +58,8 @@ int main(void){
            servoswitch = 0;
             __delay_ms(500);
         }
-        
-        
+   if(presets == 0){     
+
         if(servoswitch == 0){       // servo 1
             LED3 = 1;
             if(SW5 == 0 && servo1_pos > 0 ){
@@ -121,21 +121,29 @@ int main(void){
         }else{
            TRISC = 0b0001000;  
         }
-       
+    }else{
+        LED2 = 0;
+        LED3 = 0;
+        LED4 = 1;
+        LED5 = 0;
+        LED6 = 0;
+    }
        //preset
-       if(SW3 == 0 && presets == 0){
-            presets = 1;
-            LED1 = 0;
-            __delay_ms(15);
-       }else if(SW3 && presets == 1){
-            presets = 0;
-            LED1 = 1;
-            __delay_ms(15);
-       }
+       if(SW3 == 0 && presets > 0){ 
+           presets --;
+           LED1 = 0;
+           __delay_ms(500);
+        }if(presets != 0 && SW3 == 0){
+           presets = 1;
+           LED1 = 1;
+            __delay_ms(500);
+        }
 
         if(SW4 == 0 && presets == 1){
             servo3_pos = 255;
-            __delay_ms(); 
+            __delay_ms(100); 
+            servo1_pos = 130;
+
         }
 
 
