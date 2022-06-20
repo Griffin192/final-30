@@ -19,7 +19,6 @@
 #include    "xc.h"              // Microchip XC8 compiler include file
 #include    "stdint.h"          // Include integer definitions
 #include    "stdbool.h"         // Include Boolean (true/false) definitions
-
 #include    "UBMP410.h"         // Include UBMP4 constants and functions
 #include    "motors.h"           // Include UBMP4 servo definitions
 

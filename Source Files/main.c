@@ -20,8 +20,6 @@ unsigned char servo3_pos;        // Servo 3 position variable
 unsigned char servo4c_pos;       // Servo 4 position variable 130 = no move 
 unsigned char timerPeriods = 3; // Interrupt timer periods counter (x5ms)
 unsigned char servoswitch = 3; 
-bool maxrang = 0;
-bool presets = 0;                       // 0 = off 1 = on
    
 
 // Servo interrupt function using TMR0 to count 5ms intervals and generate 
@@ -49,6 +47,7 @@ int main(void){
     OSC_config();               // Configure internal oscillator for 48 MHz
     UBMP4_config();
     TRISC = 0b0000000;    //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa y
+
     while(1){
      
        if(SW2 == 0 && servoswitch != 4){ // pick servo
@@ -58,8 +57,8 @@ int main(void){
            servoswitch = 0;
             __delay_ms(500);
         }
-   if(presets == 0){     
-
+        
+        
         if(servoswitch == 0){       // servo 1
             LED3 = 1;
             if(SW5 == 0 && servo1_pos > 0 ){
@@ -98,57 +97,32 @@ int main(void){
         }else{
             LED5 = 0;
         }
-        
+        if(servoswitch == 3){
+            LED6 = 1;
+        }else{
+            LED6 = 0;
+        }
         if(servoswitch == 3 && SW5 == 0){ 
             TRISC = 0b0000000;
-            if(SW5 == 0 && servo4c_pos > 0){
-                servo4c_pos ++;
+           if(SW5 == 0 && servo4c_pos > 0){
+                servo4c_pos = servo4c_pos + 10;
                 __delay_ms(50);
             }
-            
-
         }else{
            TRISC = 0b0001000;  //it's 2:34am i'm going to bed. i lied it's now 5:23am 
         }
 
-        if(servoswitch == 3 && SW4 == 0 ){ 
+        if(servoswitch == 3 && SW4 == 0){ 
             TRISC = 0b0000000;
             if(SW4 == 0 && servo4c_pos < 255){
                 servo4c_pos --;
                 __delay_ms(50);
             }
-
         }else{
            TRISC = 0b0001000;  
         }
-    }else{
-        LED2 = 0;
-        LED3 = 0;
-        LED4 = 1;
-        LED5 = 0;
-        LED6 = 0;
-    }
-       //preset
-       if(SW3 == 0 && presets > 0){ 
-           presets --;
-           LED1 = 0;
-           __delay_ms(500);
-        }if(presets != 0 && SW3 == 0){
-           presets = 1;
-           LED1 = 1;
-            __delay_ms(500);
-        }
-
-        if(SW4 == 0 && presets == 1){
-            servo3_pos = 255;
-            __delay_ms(100); 
-            servo1_pos = 130;
-
-        }
-
-
-
-
+       
+    
         if(SW1 == 0){
             RESET(); 
         }
