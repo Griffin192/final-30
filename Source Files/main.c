@@ -20,7 +20,9 @@ unsigned char servo3_pos;        // Servo 3 position variable
 unsigned char servo4c_pos;       // Servo 4 position variable 130 = no move 
 unsigned char timerPeriods = 3; // Interrupt timer periods counter (x5ms)
 unsigned char servoswitch = 3; 
-   
+unsigned int two;
+unsigned int one;
+        
 
 // Servo interrupt function using TMR0 to count 5ms intervals and generate 
 // a new servo pulse every 15ms.
@@ -42,11 +44,11 @@ void __interrupt() servo(void)
 	}
 }
 
-int main(void){
+void main(){
     
     OSC_config();               // Configure internal oscillator for 48 MHz
     UBMP4_config();
-    TRISC = 0b0000000;    //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa y
+    TRISC = 0b00000000;    //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa y
 
     while(1){
      
@@ -97,35 +99,39 @@ int main(void){
         }else{
             LED5 = 0;
         }
-        if(servoswitch == 3){
+        // if(servoswitch == 3){
+        //     LED6 = 1;
+        // }else{
+        //     LED6 = 0;
+        // }
+       
+        if(SW4 == 0 ){
             LED6 = 1;
-        }else{
-            LED6 = 0;
-        }
-        if(servoswitch == 3 && SW5 == 0){ 
-            TRISC = 0b0000000;
-           if(SW5 == 0 && servo4c_pos > 0){
-                servo4c_pos = servo4c_pos + 10;
-                __delay_ms(50);
+            for(one=0;one<50;one++){
+                H4OUT = 1;
+                __delay_us(500);
+                H4OUT = 0;
+                __delay_us(19500);
             }
         }else{
-           TRISC = 0b0001000;  //it's 2:34am i'm going to bed. i lied it's now 5:23am 
+            LED6 = 0 ;
         }
-
-        if(servoswitch == 3 && SW4 == 0){ 
-            TRISC = 0b0000000;
-            if(SW4 == 0 && servo4c_pos < 255){
-                servo4c_pos --;
-                __delay_ms(50);
+        if(SW5 == 0 ){
+            LED5 = 1;
+            for(two=0;two<50;two++){
+                H4OUT = 1;
+                __delay_us(2500);
+                H4OUT = 0;
+                __delay_us(17500);
             }
         }else{
-           TRISC = 0b0001000;  
+            LED5 = 0;
         }
        
-    
         if(SW1 == 0){
-            RESET(); 
+            RESET();
         }
+        
     }
 }
     
