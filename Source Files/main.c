@@ -20,42 +20,49 @@ unsigned char servo3_pos;        // Servo 3 position variable
 unsigned char servo4c_pos;       // Servo 4 position variable 130 = no move 
 unsigned char timerPeriods = 3; // Interrupt timer periods counter (x5ms)
 unsigned char servoswitch = 3; 
-unsigned int two;
-unsigned int one;
-        
+unsigned char bctwo;
+unsigned char bcone;  
+unsigned char Rone;
+unsigned char Rtwo;
 
 // Servo interrupt function using TMR0 to count 5ms intervals and generate 
 // a new servo pulse every 15ms.
-void __interrupt() servo(void)
-{
-	if(TMR0IF == 1 && TMR0IE == 1)	// Validate Timer 0 interrupt
-	{
+void __interrupt() servo(void){
+    
+	if(TMR0IF == 1 && TMR0IE == 1){
         TMR0IF = 0;				//0
-        TMR0 = 21;              //it's 3am and it works no tuch 
-        timerPeriods --;        // Count down 5ms timer periods
-        if(timerPeriods == 0)
-        {
-            timerPeriods = 3;   // Reset timer period to 15ms servo pulse period
-            servo_pulse(SERVO1, servo1_pos);   // Update servo1 position
-            servo_pulse(SERVO2, servo2_pos);   // Update servo2 position
-            servo_pulse(SERVO3, servo3_pos);   // Update servo3 position    
-            servo_pulse(SERVO4C, servo4c_pos);   // Update servo4C position
-        }   
-	}
-}
+        TMR0 = 21;             
+        timerPeriods --;  
+        if(servoswitch >= 3 ){      // Count down 5ms timer periods
+            if(timerPeriods == 0){
+                timerPeriods = 3;   // Reset timer period to 15ms servo pulse period
+                servo_pulse(SERVO1, servo1_pos);   // Update servo1 position
+                servo_pulse(SERVO2, servo2_pos);   // Update servo2 position
+                servo_pulse(SERVO3, servo3_pos);   // Update servo3 position    
+            }   
+    }   }
+    
+} 
+  
 
-void main(){
+int main(void){
     
     OSC_config();               // Configure internal oscillator for 48 MHz
     UBMP4_config();
     TRISC = 0b00000000;    //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa y
 
     while(1){
-     
-       if(SW2 == 0 && servoswitch != 4){ // pick servo
+
+        if(SW3 == 0 && servoswitch != 0){
+            servoswitch --;
+            __delay_ms(500);
+        }else if(SW3 == 0 && servoswitch == 0){
+            servoswitch = 4;
+            __delay_ms(500);
+        }if(SW2 == 0 && servoswitch != 5){ // pick servo
            servoswitch ++;
            __delay_ms(500);
-        }if(servoswitch > 3){
+        }if(servoswitch > 4){
            servoswitch = 0;
             __delay_ms(500);
         }
@@ -86,7 +93,7 @@ void main(){
         }else{
             LED4 = 0;
         }
-
+        //it's 2:34am i'm going to bed. i lied it's now 5:23am 
         if(servoswitch == 2){       //servo 3  
             LED5 = 1;        
             if(SW5 == 0 && servo3_pos > 0 ){
@@ -99,39 +106,47 @@ void main(){
         }else{
             LED5 = 0;
         }
-        // if(servoswitch == 3){
-        //     LED6 = 1;
-        // }else{
-        //     LED6 = 0;
-        // }
-       
-        if(SW4 == 0 ){
+
+        if(servoswitch == 3){
             LED6 = 1;
-            for(one=0;one<50;one++){
+        }else{
+            LED6 = 0;
+        }if(SW4 == 0 && servoswitch == 3){
+            for(bcone=0;bcone<2;bcone++){
                 H4OUT = 1;
                 __delay_us(500);
                 H4OUT = 0;
                 __delay_us(19500);
             }
-        }else{
-            LED6 = 0 ;
-        }
-        if(SW5 == 0 ){
-            LED5 = 1;
-            for(two=0;two<50;two++){
+        }if(SW5 == 0 && servoswitch == 3){
+            for(bctwo=0;bctwo<2;bctwo++){
                 H4OUT = 1;
                 __delay_us(2500);
                 H4OUT = 0;
                 __delay_us(17500);
+            }       
+        }
+        //rist 
+        if(SW4 == 0 && servoswitch == 4){
+            for(Rone=0;Rone<2;Rone++){
+                H7OUT = 1;
+                __delay_us(500);
+                H7OUT = 0;
+                __delay_us(19500);
             }
-        }else{
-            LED5 = 0;
+        }if(SW5 == 0 && servoswitch == 4){
+            for(Rtwo=0;Rtwo<2;Rtwo++){
+                H7OUT = 1;
+                __delay_us(2500);
+                H7OUT = 0;
+                __delay_us(17500);
+            }       
         }
-       
         if(SW1 == 0){
-            RESET();
+            RESET(); 
         }
-        
     }
 }
+
+
     
