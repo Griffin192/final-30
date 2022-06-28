@@ -1,5 +1,5 @@
-##Making a robotic arm
-#By Griffin
+Making a robotic arm
+By Griffin
 
 Week one 
 I had no idea what I was doing.  Then I fingered out how to move a servo 
